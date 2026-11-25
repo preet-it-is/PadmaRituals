@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>PADMA</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="PADMA: comforting chai blends and playful fidget toys.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;1,500;1,700&family=Montserrat:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout concept: a quiet chai-house storefront. Cream paper, one 3D teacup hero, two legend cards, two product shelves, a coffee-brown closing band with the contact window. */
+:root{
+  --paper:#fffaf0; --cream:#fbf1e1; --latte:#ecd9b9;
+  --coffee:#3e261c; --coffee-2:#5a3a2a; --chai:#8a5532; --gold:#c8a060;
+  --rose:#b9507f; --rose-text:#a23d6b; --rose-soft:#f4d6e2; --sage:#7f9a72;
+  --ink:#4a2c20; --muted:#6b4630; --line:rgba(110,74,52,.28);
+  --display:'Lora',Georgia,serif; --body:'DM Sans',system-ui,sans-serif; --mark:'Montserrat','DM Sans',sans-serif;
+  color-scheme:light;
+  --gutter-l:max(16px,env(safe-area-inset-left,0px)); --gutter-r:max(16px,env(safe-area-inset-right,0px));
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--paper);z-index:60}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--rose);outline-offset:3px;border-radius:6px}
+.in{max-width:1180px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:var(--chai)}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(255,250,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav .in{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.mark{font-family:var(--mark);font-weight:800;font-size:22px;letter-spacing:.12em;color:var(--rose-text);text-decoration:none}
+.nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;align-items:center}
+.nav a.l{text-decoration:none;font-weight:500;font-size:15px;color:var(--muted)}
+.nav a.l:hover{color:var(--rose-text)}
+.btn{font:inherit;font-weight:600;font-size:15px;cursor:pointer;border-radius:999px;padding:11px 22px;border:1.5px solid var(--coffee);background:var(--coffee);color:var(--paper);transition:transform .2s,background .2s,color .2s}
+.btn:hover{transform:translateY(-2px);background:var(--rose-text);border-color:var(--rose-text)}
+.btn.ghost{background:transparent;color:var(--coffee)}
+.btn.ghost:hover{background:var(--coffee);color:var(--paper);border-color:var(--coffee)}
+@media(max-width:620px){.nav ul .hide-s{display:none}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 72% 40%,#fffaf0 0%,var(--cream) 55%,var(--latte) 130%)}
+.hero .in{display:grid;grid-template-columns:1.05fr 1fr;gap:24px;align-items:center;padding-block:56px 48px}
+.hero h1{font-family:var(--display);font-style:italic;font-weight:700;font-size:clamp(40px,6.4vw,76px);line-height:1.06;color:var(--coffee);margin-block:14px 20px}
+.hero h1 em{color:var(--rose-text);font-style:italic}
+.hero p.lead{font-size:19px;color:var(--muted);max-width:30em}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.stage{position:relative;min-width:0;height:clamp(340px,48vw,540px)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage .fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
+.stage.nogl .fallback{display:flex}
+.hint{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--chai);opacity:.8}
+@media(max-width:820px){.hero .in{grid-template-columns:1fr;padding-block:36px 24px}.stage{order:-1;height:clamp(300px,80vw,420px)}}
+
+/* history */
+.history{padding-block:88px 72px;background:var(--paper);border-top:1px solid var(--line)}
+.sec-head{max-width:40em;margin-bottom:44px}
+.sec-head h2{font-family:var(--display);font-style:italic;font-weight:700;font-size:clamp(32px,4.4vw,52px);line-height:1.1;color:var(--coffee);margin-block:12px 14px}
+.sec-head p{color:var(--muted)}
+.legends{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+@media(max-width:820px){.legends{grid-template-columns:1fr}}
+.legend{position:relative;border:1px solid var(--line);border-radius:6px;background:var(--cream);padding:0 0 28px;overflow:hidden}
+.legend .art{height:230px;background:linear-gradient(180deg,#f7e6cf,#ecd3ab);border-bottom:1px solid var(--line)}
+.legend .art svg{width:100%;height:100%;display:block}
+.legend .body{padding:22px 26px 0;display:grid;gap:10px}
+.when{font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--rose-text)}
+.legend h3{font-family:var(--display);font-style:italic;font-weight:700;font-size:28px;line-height:1.2;color:var(--coffee)}
+.legend p{color:var(--muted);font-size:16.5px}
+.note{margin-top:30px;padding:18px 22px;border-left:3px solid var(--gold);background:rgba(200,160,96,.12);color:var(--muted);max-width:52em;border-radius:0 6px 6px 0}
+
+/* products */
+.shop{padding-block:88px 40px}
+.shelf{margin-bottom:64px}
+.shelf-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.shelf-head h3{font-family:var(--display);font-style:italic;font-weight:700;font-size:32px;color:var(--coffee)}
+.shelf-head span{font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--chai)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.card{perspective:900px}
+.card-in{position:relative;transform-style:preserve-3d;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px 22px;display:grid;gap:10px;height:100%;box-shadow:0 10px 28px -16px rgba(62,38,28,.35)}
+.card-in.tilting{transition:transform .08s linear}
+.card-in:hover{box-shadow:0 26px 44px -22px rgba(62,38,28,.5)}
+.vis{height:220px;display:flex;align-items:center;justify-content:center;transform:translateZ(46px);border-radius:6px;background:radial-gradient(ellipse at 50% 60%,var(--tint,rgba(214,133,168,.22)),transparent 68%)}
+.vis svg{height:200px;width:auto;max-width:100%;overflow:visible;filter:drop-shadow(0 12px 12px rgba(62,38,28,.2))}
+.tag{font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--chai);transform:translateZ(20px)}
+.card h4{margin:0;font-family:var(--display);font-style:italic;font-weight:700;font-size:25px;line-height:1.2;color:var(--coffee);transform:translateZ(24px)}
+.card p{font-size:15.5px;color:var(--muted);transform:translateZ(14px)}
+.buy{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;transform:translateZ(30px)}
+.price{font-family:var(--body);font-weight:600;font-size:24px;color:var(--coffee);font-variant-numeric:tabular-nums}
+.glare{position:absolute;inset:0;border-radius:8px;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.55),transparent 55%);opacity:0;transition:opacity .3s;mix-blend-mode:soft-light}
+.card-in:hover .glare{opacity:1}
+.float{animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-8px) rotate(1.5deg)}}
+.spin{transform-origin:115px 115px;transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
+.card-in:hover .spin{transform:rotate(300deg)}
+.pop circle.b{transition:transform .25s;transform-box:fill-box;transform-origin:center}
+.card-in:hover .pop circle.b{transform:scale(.82)}
+.card-in:hover .pop circle.b:nth-of-type(3n){transition-delay:.12s}
+.card-in:hover .pop circle.b:nth-of-type(3n+1){transition-delay:.24s}
+
+/* closing band */
+.closing{background:var(--coffee);color:var(--cream);padding-block:80px 44px;margin-top:40px}
+.closing .eyebrow{color:var(--gold)}
+.closing h2{font-family:var(--display);font-style:italic;font-weight:700;font-size:clamp(32px,5vw,58px);line-height:1.1;margin-block:12px 18px;color:var(--paper)}
+.closing p{color:#e8d6bb;max-width:34em}
+.closing .row{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+.closing .btn{background:var(--paper);color:var(--coffee);border-color:var(--paper)}
+.closing .btn:hover{background:var(--rose-soft);border-color:var(--rose-soft);color:var(--coffee)}
+.closing .btn.ghost{background:transparent;color:var(--paper);border-color:rgba(255,250,240,.6)}
+.closing .btn.ghost:hover{background:var(--paper);color:var(--coffee)}
+.tags{margin-top:56px;padding-top:22px;border-top:1px solid rgba(200,160,96,.45);display:flex;gap:10px 22px;flex-wrap:wrap;justify-content:space-between;font-size:14px;color:#d8c3a2}
+.tags span.h{letter-spacing:.02em}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(40,24,16,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.scrim.open{display:flex;animation:fade .25s ease both}
+.win{width:min(560px,100%);max-height:calc(100% - 16px);overflow:auto;background:var(--paper);color:var(--ink);border-radius:10px;border:1px solid var(--gold);box-shadow:0 30px 70px -20px rgba(0,0,0,.55);animation:pop .35s cubic-bezier(.2,.9,.3,1.1) both}
+.win header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:22px 26px 6px}
+.win h2{font-family:var(--display);font-style:italic;font-weight:700;font-size:30px;line-height:1.15;color:var(--coffee)}
+.x{font:inherit;font-size:26px;line-height:1;background:none;border:0;cursor:pointer;color:var(--muted);padding:4px 10px;border-radius:6px}
+.x:hover{color:var(--rose-text)}
+.win form{padding:8px 26px 26px;display:grid;gap:14px}
+.win p.s{color:var(--muted);font-size:15px;padding:0 26px}
+label{display:grid;gap:5px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--chai)}
+input,select,textarea{font:inherit;font-size:16px;letter-spacing:0;text-transform:none;font-weight:400;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:11px 13px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--rose);box-shadow:0 0 0 3px rgba(185,80,127,.18)}
+textarea{min-height:104px;resize:vertical}
+.out{display:none;gap:10px;padding:8px 26px 26px}
+.out.show{display:grid}
+.out pre{margin:0;white-space:pre-wrap;word-break:break-word;font:inherit;font-size:15px;background:var(--cream);border:1px dashed var(--gold);border-radius:8px;padding:14px}
+.out .ok{font-weight:600;color:var(--sage)}
+.info{display:grid;gap:4px;padding:2px 26px 0;font-size:15px;color:var(--muted)}
+.info b{color:var(--ink)}
+.rv.in-view{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes leaf{0%{transform:translate(0,-30px) rotate(0)}60%{transform:translate(-8px,60px) rotate(140deg)}100%{transform:translate(-4px,86px) rotate(200deg);opacity:0}}
+@keyframes rise-s{0%{transform:translateY(8px);opacity:0}30%{opacity:.7}100%{transform:translateY(-34px);opacity:0}}
+@keyframes flame{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.18)}}
+@keyframes sprout{0%,12%{transform:scale(0)}55%,100%{transform:scale(1)}}
+.leaf-a{animation:leaf 5.5s ease-in infinite;transform-box:fill-box;transform-origin:center}
+.steam-a{animation:rise-s 3.4s ease-out infinite;transform-box:fill-box}
+.steam-a:nth-of-type(2){animation-delay:1.2s}
+.flame-a{animation:flame 1.1s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.sprout-a{animation:sprout 6s ease-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+
+</head>
+<body>
+<header class="nav">
+  <div class="in">
+    <a class="mark" href="#top" aria-label="PADMA home">PADMA</a>
+    <ul>
+      <li class="hide-s"><a class="l" href="#story">History</a></li>
+      <li class="hide-s"><a class="l" href="#shop">Shop</a></li>
+      <li><button class="btn" type="button" data-open-contact>Contact us</button></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="in">
+    <div class="rv">
+      <div class="eyebrow">Chai &nbsp;·&nbsp; Fidget toys</div>
+      <h1>A little pause, <em>beautifully</em> brewed.</h1>
+      <p class="lead">Comforting chai blends and playful fidget toys, made for slower, softer moments.</p>
+      <div class="cta">
+        <a class="btn" href="#shop" style="text-decoration:none;display:inline-block">Explore the shelf</a>
+        <a class="btn ghost" href="#story" style="text-decoration:none;display:inline-block">Read the legends</a>
+      </div>
+    </div>
+    <div class="stage" id="stage" aria-label="A 3D teacup with rising steam and drifting lotus petals">
+      <canvas id="gl"></canvas>
+      <div class="fallback" aria-hidden="true">
+        <svg viewBox="0 0 240 200" width="320"><ellipse cx="120" cy="170" rx="100" ry="16" fill="#e5d0ad"/><path d="M50 80 h120 q0 70 -60 70 t-60 -70z" fill="#fff8ee" stroke="#c8a060" stroke-width="3"/><ellipse cx="110" cy="82" rx="60" ry="9" fill="#8a3b12"/><path d="M170 92 q38 6 0 40" fill="none" stroke="#c8a060" stroke-width="8"/></svg>
+      </div>
+      <div class="hint">Move your cursor to turn the cup</div>
+    </div>
+  </div>
+</section>
+
+<section class="history" id="story">
+  <div class="in">
+    <div class="sec-head rv">
+      <div class="eyebrow">A short history of tea</div>
+      <h2>Two legends, one leaf.</h2>
+      <p>Long before chai had spices and cups had saucers, tea had stories. China tells two of them best: one about an emperor, one about a monk.</p>
+    </div>
+    <div class="legends">
+      <article class="legend rv">
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice">
+            <circle cx="320" cy="56" r="26" fill="#f7d9a3" opacity=".8"/>
+            <path d="M-10 170 Q100 150 200 168 T410 160 V240 H-10z" fill="#d9b985"/>
+            <path d="M40 40 Q90 30 150 50" fill="none" stroke="#5a3a2a" stroke-width="5" stroke-linecap="round"/>
+            <path d="M44 42 Q36 80 58 120" fill="none" stroke="#5a3a2a" stroke-width="7" stroke-linecap="round"/>
+            <path class="leaf-a" d="M140 40 q18 -16 30 4 q-14 16 -30 -4z" fill="#7f9a72"/>
+            <path d="M150 52 q16 -12 24 4" fill="none" stroke="#5a3a2a" stroke-width="2"/>
+            <g transform="translate(205,0)">
+              <path d="M30 120 h110 l-12 56 h-86z" fill="#4a2c20"/>
+              <ellipse cx="85" cy="120" rx="55" ry="9" fill="#6a4630"/>
+              <ellipse cx="85" cy="120" rx="46" ry="6" fill="#9a5a2a"/>
+              <path d="M40 176 l-14 20 M130 176 l14 20 M85 176 v22" stroke="#4a2c20" stroke-width="7" stroke-linecap="round"/>
+              <path class="flame-a" d="M72 214 q-6 -16 6 -26 q2 12 12 14 q6 -6 4 -14 q14 14 -2 26z" fill="#d98a3a"/>
+              <path class="steam-a" d="M70 108 q-10 -16 0 -30" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+              <path class="steam-a" d="M100 108 q-10 -16 0 -30" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+            </g>
+          </svg>
+        </div>
+        <div class="body">
+          <div class="when">Legend &nbsp;·&nbsp; around 2737 BCE</div>
+          <h3>Shennong and the falling leaf</h3>
+          <p>The tale says Emperor Shennong, the divine farmer who tested herbs to learn their powers, was boiling drinking water when a few leaves from a wild tea tree drifted into the pot. The water turned a pale gold. He tasted it, found it fragrant and refreshing, and tea was born.</p>
+        </div>
+      </article>
+
+      <article class="legend rv">
+        <div class="art" aria-hidden="true" style="background:linear-gradient(180deg,#f3dcc0,#e3c398)">
+          <svg viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice">
+            <circle cx="90" cy="52" r="24" fill="#f7d9a3" opacity=".85"/>
+            <rect x="170" y="30" width="190" height="150" rx="6" fill="#c9a577"/>
+            <path d="M170 70 h190 M170 110 h190 M170 150 h190 M215 30 v40 M300 70 v40 M230 110 v40 M320 150 v30" stroke="#a98456" stroke-width="2" fill="none"/>
+            <path d="M-10 180 H410 V240 H-10z" fill="#c9a06a"/>
+            <g transform="translate(110,0)">
+              <circle cx="74" cy="92" r="17" fill="#8a5532"/>
+              <path d="M30 180 q4 -64 44 -72 q42 8 46 72z" fill="#b9507f"/>
+              <path d="M44 150 q30 20 60 0" fill="none" stroke="#8a3560" stroke-width="3"/>
+              <ellipse cx="75" cy="182" rx="56" ry="9" fill="#a47a4c"/>
+              <circle cx="74" cy="92" r="30" fill="none" stroke="#c8a060" stroke-width="2" stroke-dasharray="3 5"/>
+            </g>
+            <g class="sprout-a">
+              <path d="M290 182 v-30" stroke="#5f7d52" stroke-width="4" stroke-linecap="round"/>
+              <path d="M290 160 q-22 -6 -20 -26 q20 2 20 26z" fill="#7f9a72"/>
+              <path d="M290 152 q22 -8 22 -28 q-22 4 -22 28z" fill="#93b084"/>
+            </g>
+          </svg>
+        </div>
+        <div class="body">
+          <div class="when">Legend &nbsp;·&nbsp; around the 5th to 6th century CE</div>
+          <h3>Bodhidharma and the nine-year vigil</h3>
+          <p>Bodhidharma, the monk who carried Buddhist meditation from India to China, is said to have sat facing a wall for nine years. When sleep finally overtook him, he was so angry that he cut off his eyelids. Where they fell, the first tea plants are said to have sprouted, and tea became the monks' companion for staying awake.</p>
+        </div>
+      </article>
+    </div>
+    <p class="note rv">Both are legends, not recorded history. What they agree on is that tea began in China, grew into a ritual of calm and attention, and then travelled along trade routes across Asia until it reached India and became chai.</p>
+  </div>
+</section>
+
+<section class="shop" id="shop">
+  <div class="in">
+    <div class="sec-head rv">
+      <div class="eyebrow">The PADMA shelf</div>
+      <h2>For the heart, and for the hands.</h2>
+      <p>Three chai blends to slow the morning down, and three fidget toys for restless fingers.</p>
+    </div>
+
+    <div class="shelf">
+      <div class="shelf-head rv"><h3>Chai &amp; tea blends</h3><span>₹1,099 each</span></div>
+      <div class="grid" id="teas"></div>
+    </div>
+    <div class="shelf">
+      <div class="shelf-head rv"><h3>Fidget toys</h3><span>₹599 each</span></div>
+      <div class="grid" id="toys"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="closing">
+  <div class="in">
+    <div class="eyebrow">Say hello</div>
+    <h2 class="rv">Tea for the heart, toys for the hands.</h2>
+    <p class="rv">Questions, gifting ideas or an order to place? Send us a note and we will reply.</p>
+    <div class="row">
+      <button class="btn" type="button" data-open-contact>Contact us</button>
+      <a class="btn ghost" href="#shop" style="text-decoration:none;display:inline-block">Back to the shelf</a>
+    </div>
+    <div class="tags">
+      <span class="h">#PadmaMoments &nbsp; #ChaiAndSukoon &nbsp; #FidgetToys &nbsp; #SlowLiving &nbsp; #ChaiTime &nbsp; #CalmCorner</span>
+      <span>© 2026 PADMA</span>
+    </div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim">
+  <div class="win" role="dialog" aria-modal="true" aria-labelledby="cw-title" id="win">
+    <header>
+      <h2 id="cw-title">Contact us</h2>
+      <button class="x" type="button" id="cw-close" aria-label="Close contact window">×</button>
+    </header>
+    <p class="s">Tell us what you are looking for and we will get back to you.</p>
+    <div class="info" id="cw-info"></div>
+    <form id="cw-form" novalidate>
+      <label for="cw-name">Your name<input id="cw-name" name="name" autocomplete="name" required></label>
+      <label for="cw-reach">Phone or email<input id="cw-reach" name="reach" autocomplete="email" required></label>
+      <label for="cw-product">I am interested in
+        <select id="cw-product" name="product"></select>
+      </label>
+      <label for="cw-msg">Message<textarea id="cw-msg" name="msg" placeholder="Anything you would like us to know?"></textarea></label>
+      <div id="cw-err" role="alert" style="color:var(--rose-text);font-size:14px;min-height:1em"></div>
+      <button class="btn" type="submit" id="cw-send">Send message</button>
+    </form>
+    <div class="out" id="cw-out">
+      <div class="ok" id="cw-ok"></div>
+      <pre id="cw-pre"></pre>
+      <button class="btn" type="button" id="cw-copy">Copy message</button>
+      <button class="btn ghost" type="button" id="cw-back" style="color:var(--coffee);border-color:var(--coffee)">Edit message</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------- contact details: fill these in and the window uses them ---------- */
+var CONTACT = { whatsapp: '', email: '', instagram: '' }; // whatsapp: digits with country code, e.g. 919800000000
+
+/* ---------- products ---------- */
+function lotusMark(accent){
+  var s='<g transform="translate(100,138)">';
+  [-60,-30,0,30,60].forEach(function(a){ s+='<ellipse cx="0" cy="-10" rx="5.5" ry="13" fill="'+accent+'" transform="rotate('+a+')"/>'; });
+  return s+'</g>';
+}
+function tin(id,c1,c2,c3,accent,word){
+  return '<svg viewBox="0 0 200 250" role="img" aria-label="Tea tin"><defs><linearGradient id="tg'+id+'" x1="0" x2="1"><stop offset="0" stop-color="'+c3+'"/><stop offset=".3" stop-color="'+c1+'"/><stop offset=".65" stop-color="'+c2+'"/><stop offset="1" stop-color="'+c3+'"/></linearGradient></defs>'+
+  '<path d="M34 70 v146 a66 13 0 0 0 132 0 v-146z" fill="url(#tg'+id+')"/>'+
+  '<path d="M30 44 v28 a70 14 0 0 0 140 0 v-28z" fill="#c8a060"/><path d="M30 44 v6 a70 14 0 0 0 140 0 v-6z" fill="#e2c78d" opacity=".6"/>'+
+  '<ellipse cx="100" cy="44" rx="70" ry="14" fill="#e6cf9c"/><ellipse cx="100" cy="44" rx="52" ry="9" fill="#c8a060" opacity=".5"/>'+
+  '<rect x="52" y="96" width="96" height="92" rx="6" fill="#fff6e6" opacity=".96"/>'+
+  lotusMark(accent)+
+  '<text x="100" y="170" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="800" font-size="11" letter-spacing="3" fill="#4a2c20">PADMA</text>'+
+  '<text x="100" y="183" text-anchor="middle" font-family="DM Sans,sans-serif" font-weight="600" font-size="8" letter-spacing="2.4" fill="#8a5532">'+word+'</text></svg>';
+}
+function spinner(){
+  return '<svg viewBox="0 0 230 230" role="img" aria-label="Fidget spinner"><g class="spin"><g stroke="#f4d6e2" stroke-width="60" stroke-linecap="round"><line x1="115" y1="115" x2="115" y2="42"/><line x1="115" y1="115" x2="52" y2="152"/><line x1="115" y1="115" x2="178" y2="152"/></g><circle cx="115" cy="115" r="42" fill="#f4d6e2"/>'+
+  '<circle cx="115" cy="42" r="30" fill="#cd9660"/><circle cx="115" cy="42" r="16" fill="#fbf1e1"/><circle cx="52" cy="152" r="30" fill="#d685a8"/><circle cx="52" cy="152" r="16" fill="#fbf1e1"/><circle cx="178" cy="152" r="30" fill="#9eb892"/><circle cx="178" cy="152" r="16" fill="#fbf1e1"/>'+
+  '<circle cx="115" cy="115" r="22" fill="#d685a8"/><circle cx="115" cy="115" r="10" fill="#fbf1e1"/></g></svg>';
+}
+function popit(){
+  var cols=['#e4a0b6','#9eb892','#d9a56a','#c4a08c'], s='<svg class="pop" viewBox="0 0 220 220" role="img" aria-label="Pop bubble board"><rect x="6" y="6" width="208" height="208" rx="30" fill="#f4d6e2" stroke="#c8a060" stroke-width="3"/>';
+  for(var r=0;r<4;r++)for(var c=0;c<4;c++){ var x=42+c*45,y=42+r*45,k=cols[(r+c)%4]; s+='<circle class="b" cx="'+x+'" cy="'+y+'" r="17" fill="'+k+'"/><circle cx="'+(x-5)+'" cy="'+(y-6)+'" r="5" fill="#fff" opacity=".45"/>'; }
+  return s+'</svg>';
+}
+function cube(){
+  return '<svg viewBox="0 0 200 200" role="img" aria-label="Infinity cube"><g class="float"><polygon points="100,26 160,56 100,86 40,56" fill="#f1c9d9"/><polygon points="40,56 100,86 100,156 40,126" fill="#d685a8"/><polygon points="100,86 160,56 160,126 100,156" fill="#cd9660"/>'+
+  '<g stroke="#fff6e6" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".9"><path d="M130 41 L70 71 M130 71 L70 41"/><path d="M70 71 V141 M100 106 L40 91"/><path d="M130 71 V141 M160 91 L100 106"/></g></g></svg>';
+}
+var TEAS=[
+ {id:'t1',name:'Royal Masala Chai',tag:'Black tea · Spiced',desc:'Strong Assam black tea warmed with cardamom, cinnamon and ginger. Made for milk, sugar and a long pause.',svg:tin(1,'#a9552e','#7d3a1c','#4f2410','#f4d6e2','MASALA'),tint:'rgba(185,110,60,.25)'},
+ {id:'t2',name:'Jasmine Lotus Green',tag:'Green tea · Floral',desc:'Light green tea scented with jasmine and lotus petals. Soft, fragrant and gentle on a quiet afternoon.',svg:tin(2,'#7f9a72','#5f7d52','#3f5a36','#d685a8','JASMINE'),tint:'rgba(127,154,114,.28)'},
+ {id:'t3',name:'Rose Chamomile Calm',tag:'Herbal · Caffeine-free',desc:'Rose petals and chamomile in a caffeine-free blend, poured for the end of the day.',svg:tin(3,'#c9788f','#a85a72','#7d3d54','#fff1d6','ROSE'),tint:'rgba(214,133,168,.3)'}
+];
+var TOYS=[
+ {id:'f1',name:'Lotus Spinner',tag:'Spin',desc:'A three-lobed hand spinner in rose, sage and caramel. Flick it, watch it glide, let your thoughts settle.',svg:spinner(),tint:'rgba(214,133,168,.28)'},
+ {id:'f2',name:'Pop Bloom Board',tag:'Pop',desc:'A board of soft pop bubbles to press, flip and press again. Quietly satisfying at your desk or on the sofa.',svg:popit(),tint:'rgba(205,150,96,.28)'},
+ {id:'f3',name:'Infinity Cube',tag:'Flip',desc:'A cube that folds and flips without end. Something to hold during calls, commutes and long thinking.',svg:cube(),tint:'rgba(127,154,114,.26)'}
+];
+function esc(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function cardHTML(p,price){
+  return '<div class="card rv"><div class="card-in"><div class="glare"></div>'+
+   '<div class="vis" style="--tint:'+p.tint+'">'+p.svg+'</div>'+
+   '<div class="tag">'+esc(p.tag)+'</div><h4>'+esc(p.name)+'</h4><p>'+esc(p.desc)+'</p>'+
+   '<div class="buy"><span class="price">₹'+price+'</span><button class="btn ghost" type="button" data-open-contact data-product="'+esc(p.name)+'">Enquire</button></div></div></div>';
+}
+document.getElementById('teas').innerHTML=TEAS.map(function(p){return cardHTML(p,'1,099');}).join('');
+document.getElementById('toys').innerHTML=TOYS.map(function(p){return cardHTML(p,'599');}).join('');
+
+/* ---------- reveal on scroll (content is visible at rest; this only adds a rise) ---------- */
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if('IntersectionObserver' in window && !reduce){
+  var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in-view');ro.unobserve(e.target);}});},{threshold:.12});
+  document.querySelectorAll('.rv').forEach(function(el){ro.observe(el);});
+}
+
+/* ---------- 3D tilt on cards ---------- */
+if(!reduce){
+  document.querySelectorAll('.card').forEach(function(card){
+    var inner=card.querySelector('.card-in');
+    card.addEventListener('pointermove',function(e){
+      if(e.pointerType==='touch')return;
+      var r=card.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+      inner.classList.add('tilting');
+      inner.style.transform='rotateY('+((px-.5)*16).toFixed(2)+'deg) rotateX('+((.5-py)*14).toFixed(2)+'deg) translateY(-4px)';
+      inner.style.setProperty('--gx',(px*100)+'%');inner.style.setProperty('--gy',(py*100)+'%');
+    });
+    card.addEventListener('pointerleave',function(){inner.classList.remove('tilting');inner.style.transform='';});
+  });
+}
+
+/* ---------- contact window ---------- */
+(function(){
+  var scrim=document.getElementById('scrim'),win=document.getElementById('win'),form=document.getElementById('cw-form'),out=document.getElementById('cw-out'),
+      sel=document.getElementById('cw-product'),err=document.getElementById('cw-err'),pre=document.getElementById('cw-pre'),ok=document.getElementById('cw-ok'),info=document.getElementById('cw-info'),
+      last=null,msgText='';
+  var opts=['General enquiry'].concat(TEAS.map(function(p){return p.name+' (tea, ₹1,099)';}),TOYS.map(function(p){return p.name+' (fidget toy, ₹599)';}));
+  sel.innerHTML=opts.map(function(o){return '<option>'+esc(o)+'</option>';}).join('');
+  var lines=[];
+  if(CONTACT.whatsapp)lines.push('<div>WhatsApp: <b>+'+esc(CONTACT.whatsapp)+'</b></div>');
+  if(CONTACT.email)lines.push('<div>Email: <b>'+esc(CONTACT.email)+'</b></div>');
+  if(CONTACT.instagram)lines.push('<div>Instagram: <b>@'+esc(CONTACT.instagram.replace(/^@/,''))+'</b></div>');
+  if(!lines.length)lines.push('<div>You can also message us on Instagram.</div>');
+  info.innerHTML=lines.join('');
+  function open(prod,trigger){
+    last=trigger||null;form.hidden=false;out.classList.remove('show');err.textContent='';
+    if(prod){for(var i=0;i<sel.options.length;i++){if(sel.options[i].text.indexOf(prod)===0){sel.selectedIndex=i;break;}}}
+    scrim.classList.add('open');document.body.style.overflow='hidden';
+    setTimeout(function(){document.getElementById('cw-name').focus();},30);
+  }
+  function close(){scrim.classList.remove('open');document.body.style.overflow='';if(last&&last.focus)last.focus();}
+  document.addEventListener('click',function(e){
+    var t=e.target.closest&&e.target.closest('[data-open-contact]');
+    if(t){e.preventDefault();open(t.getAttribute('data-product'),t);}
+  });
+  document.getElementById('cw-close').addEventListener('click',close);
+  scrim.addEventListener('click',function(e){if(e.target===scrim)close();});
+  document.addEventListener('keydown',function(e){
+    if(!scrim.classList.contains('open'))return;
+    if(e.key==='Escape'){close();return;}
+    if(e.key==='Tab'){
+      var f=win.querySelectorAll('button,input,select,textarea,a[href]'),vis=[];
+      f.forEach(function(n){if(n.offsetParent!==null&&!n.disabled)vis.push(n);});
+      if(!vis.length)return;var a=vis[0],z=vis[vis.length-1];
+      if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}
+      else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}
+    }
+  });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=document.getElementById('cw-name').value.trim(),r=document.getElementById('cw-reach').value.trim(),m=document.getElementById('cw-msg').value.trim();
+    if(!n||!r){err.textContent='Please add your name and a phone number or email so we can reply.';return;}
+    err.textContent='';
+    msgText='Hello PADMA, I am '+n+'.\nInterested in: '+sel.value+'\n'+(m?'Message: '+m+'\n':'')+'Reach me at: '+r;
+    pre.textContent=msgText;form.hidden=true;out.classList.add('show');
+    var wa=CONTACT.whatsapp?'https://wa.me/'+CONTACT.whatsapp.replace(/\D/g,'')+'?text='+encodeURIComponent(msgText):'';
+    var holder=document.getElementById('cw-wa');if(holder)holder.remove();
+    if(wa){
+      ok.textContent='Your message is ready. Open WhatsApp to send it.';
+      var a=document.createElement('a');a.id='cw-wa';a.className='btn';a.href=wa;a.target='_blank';a.rel='noopener';a.textContent='Open WhatsApp';a.style.cssText='text-decoration:none;text-align:center;display:block';
+      out.insertBefore(a,document.getElementById('cw-copy'));
+    }else{
+      ok.textContent='Your message is ready. Copy it and send it to us in an Instagram message.';
+    }
+  });
+  document.getElementById('cw-back').addEventListener('click',function(){out.classList.remove('show');form.hidden=false;});
+  document.getElementById('cw-copy').addEventListener('click',function(){
+    var b=this;
+    function done(t){b.textContent=t;setTimeout(function(){b.textContent='Copy message';},1800);}
+    try{navigator.clipboard.writeText(msgText).then(function(){done('Copied');},function(){sel2();});}catch(x){sel2();}
+    function sel2(){var rg=document.createRange();rg.selectNodeContents(pre);var s=window.getSelection();s.removeAllRanges();s.addRange(rg);done('Selected, press copy');}
+  });
+})();
+
+/* ---------- 3D teacup hero ---------- */
+(function(){
+  var stage=document.getElementById('stage'),canvas=document.getElementById('gl');
+  if(!window.THREE){stage.classList.add('nogl');return;}
+  var renderer;
+  try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});}catch(e){stage.classList.add('nogl');return;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  var scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(32,1,.1,60);
+  camera.position.set(0,3.3,9.2);camera.lookAt(0,1.2,0);
+
+  scene.add(new THREE.HemisphereLight(0xfff3e0,0xd9b99b,.95));
+  var key=new THREE.DirectionalLight(0xffffff,.85);key.position.set(3,6,5);scene.add(key);
+  var rim=new THREE.PointLight(0xd685a8,.7,18);rim.position.set(-4,2,3);scene.add(rim);
+  var warm=new THREE.PointLight(0xffc98a,.5,14);warm.position.set(3,1,-2);scene.add(warm);
+
+  var set=new THREE.Group();scene.add(set);
+  var porcelain=new THREE.MeshStandardMaterial({color:0xfff8ee,roughness:.28,metalness:.04,side:THREE.DoubleSide});
+  var gold=new THREE.MeshStandardMaterial({color:0xc8a060,roughness:.32,metalness:.85});
+  function lathe(pts,mat){return new THREE.Mesh(new THREE.LatheGeometry(pts.map(function(p){return new THREE.Vector2(p[0],p[1]);}),72),mat);}
+
+  var saucer=lathe([[.001,0],[1.3,0],[1.85,.1],[2.12,.26],[2.08,.29],[1.82,.2],[1.3,.1],[.001,.1]],porcelain);set.add(saucer);
+  var sr=new THREE.Mesh(new THREE.TorusGeometry(2.1,.022,12,96),gold);sr.rotation.x=Math.PI/2;sr.position.y=.275;set.add(sr);
+
+  var cup=new THREE.Group();cup.position.y=.1;set.add(cup);
+  cup.add(lathe([[.001,0],[.5,0],[.62,.08],[.76,.36],[1.0,.8],[1.18,1.3],[1.22,1.42],[1.16,1.44],[1.1,1.3],[.9,.85],[.6,.45],[.001,.38]],porcelain));
+  var tea=new THREE.Mesh(new THREE.CircleGeometry(1.0,64),new THREE.MeshStandardMaterial({color:0x8a3b12,roughness:.12,metalness:.15,emissive:0x2a0e03,emissiveIntensity:.5}));
+  tea.rotation.x=-Math.PI/2;tea.position.y=1.12;cup.add(tea);
+  var rimG=new THREE.Mesh(new THREE.TorusGeometry(1.19,.022,12,96),gold);rimG.rotation.x=Math.PI/2;rimG.position.y=1.43;cup.add(rimG);
+  var band=new THREE.Mesh(new THREE.TorusGeometry(1.0,.014,10,96),gold);band.rotation.x=Math.PI/2;band.position.y=.8;cup.add(band);
+  var handle=new THREE.Mesh(new THREE.TorusGeometry(.44,.075,16,40,Math.PI),porcelain);handle.rotation.z=-Math.PI/2;handle.position.set(1.12,.86,0);cup.add(handle);
+
+  // soft ground shadow
+  function radial(c0,c1,size){var cv=document.createElement('canvas');cv.width=cv.height=size||128;var x=cv.getContext('2d'),g=x.createRadialGradient(cv.width/2,cv.height/2,0,cv.width/2,cv.height/2,cv.width/2);g.addColorStop(0,c0);g.addColorStop(1,c1);x.fillStyle=g;x.fillRect(0,0,cv.width,cv.height);return new THREE.CanvasTexture(cv);}
+  var shadow=new THREE.Mesh(new THREE.PlaneGeometry(6.4,6.4),new THREE.MeshBasicMaterial({map:radial('rgba(70,40,25,.38)','rgba(70,40,25,0)'),transparent:true,depthWrite:false}));
+  shadow.rotation.x=-Math.PI/2;shadow.position.y=-.02;scene.add(shadow);
+
+  // steam
+  var steamTex=radial('rgba(255,255,255,.95)','rgba(255,255,255,0)'),steam=[];
+  for(var i=0;i<16;i++){var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:steamTex,color:0xb89479,transparent:true,opacity:0,depthWrite:false}));sp.userData={o:i/16,x:(Math.random()-.5)*.7,ph:Math.random()*6.28};steam.push(sp);scene.add(sp);}
+
+  // drifting petals
+  var ps=new THREE.Shape();ps.moveTo(0,0);ps.quadraticCurveTo(.34,.32,0,.95);ps.quadraticCurveTo(-.34,.32,0,0);
+  var pg=new THREE.ShapeGeometry(ps),petals=[];
+  var pcols=[0xe9a6c4,0xf4c9dc,0xd685a8,0xf1b8d0];
+  for(var j=0;j<18;j++){
+    var pm=new THREE.Mesh(pg,new THREE.MeshStandardMaterial({color:pcols[j%4],roughness:.6,side:THREE.DoubleSide}));
+    var s=.28+Math.random()*.3;pm.scale.set(s,s,s);
+    pm.userData={a:Math.random()*6.28,r:2.4+Math.random()*2.2,y:Math.random()*5,sp:.25+Math.random()*.35,rs:new THREE.Vector3(Math.random()*1.2,Math.random()*1.2,Math.random()*1.2),z:(Math.random()-.5)*3};
+    petals.push(pm);scene.add(pm);
+  }
+
+  function resize(){var w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.position.z=w/h<.9?12.6:9.2;camera.updateProjectionMatrix();}
+  resize();
+  if('ResizeObserver' in window)new ResizeObserver(resize).observe(stage);else window.addEventListener('resize',resize);
+
+  var mx=0,my=0,tx=0,ty=0,visible=true,t0=performance.now();
+  stage.addEventListener('pointermove',function(e){var r=stage.getBoundingClientRect();mx=((e.clientX-r.left)/r.width-.5)*2;my=((e.clientY-r.top)/r.height-.5)*2;});
+  stage.addEventListener('pointerleave',function(){mx=0;my=0;});
+
+  function frame(now){
+    var t=(now-t0)/1000;
+    tx+=(mx-tx)*.06;ty+=(my-ty)*.06;
+    set.rotation.y=(reduce?-.5:t*.28)+tx*.9;
+    set.rotation.x=.12+ty*.18;
+    set.position.y=reduce?0:Math.sin(t*1.1)*.06;
+    steam.forEach(function(s){
+      var u=reduce?s.userData.o:((t*.16+s.userData.o)%1);
+      s.position.set(Math.sin(u*7+s.userData.ph)*.3+s.userData.x*.5,1.7+u*2.8,Math.cos(u*5+s.userData.ph)*.2);
+      var sc=.7+u*1.7;s.scale.set(sc,sc,1);s.material.opacity=Math.sin(Math.PI*u)*.3;
+    });
+    petals.forEach(function(p){
+      var d=p.userData,u=reduce?0:t;
+      var fall=((d.y-u*d.sp)%5+5)%5;
+      p.position.set(Math.cos(d.a+u*.12)*d.r,fall-.2,Math.sin(d.a+u*.12)*d.r*.6+d.z*.3);
+      p.rotation.set(d.rs.x*u+d.a,d.rs.y*u,d.rs.z*u);
+    });
+    renderer.render(scene,camera);
+  }
+  function loop(now){if(visible){frame(now);}requestAnimationFrame(loop);}
+  frame(performance.now());
+  if(!reduce){requestAnimationFrame(loop);}
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting;}).observe(stage);}
+})();
+</script>
+</body>
+</html>
